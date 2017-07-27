@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  httpd:
+    build:
+      context: ./docker/httpd
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./apps:/var/www/html:rw
+      - ./docker/httpd/vhosts:/etc/apache2/sites-enabled:rw
+    ports:
+      - "80:80"
+      - "443:443"
+
+  db:
+    image: mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+    volumes:
+       - ./docker/db/data:/var/lib/mysql:rw
+    ports:
+        - "3306:3306"
